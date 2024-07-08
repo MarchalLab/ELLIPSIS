@@ -1,0 +1,65 @@
+Welcome to ELLIPSIS (release mode)
+ (commit ae7f76b)
+
+/home/bioit/mhecke/Programs/ELLIPSIS/build/src/ELLIPSIS -gtf /home/bioit/mhecke/Programs/ELLIPSIS/testData/TSPAN6.gtf -alignmentDir /home/bioit/mhecke/Programs/ELLIPSIS/testData/alignment -neighborFile /home/bioit/mhecke/Programs/ELLIPSIS/testData/neighbors.tsv -readLength 75 -outDir outELLIPSIS -CPU 1 -wSrcSink 1 -wFlow 6 -wClust 4 -maxIter 100 -minDepth 10 -countFile /home/bioit/mhecke/Programs/ELLIPSIS/testData/counts/scCounts.tsv -maxPaths inf -novelJunctionFile /home/bioit/mhecke/Programs/ELLIPSIS/testData/alignment/SJ.filtered.tab -verbose 
+
+
+Building splice graphs from reference genome
+============================================
+
+Done building from reference genome in 2ms
+
+
+Merging SJ files
+================
+
+Partially merging SJ files in 1 chunks 	[>                                                                     ] 0 %Partially merging SJ files in 1 chunks 	[==============>                                                       ] 20 %Partially merging SJ files in 1 chunks 	[============================>                                         ] 40 %Partially merging SJ files in 1 chunks 	[==========================================>                           ] 60 %Partially merging SJ files in 1 chunks 	[========================================================>             ] 80 %Partially merging SJ files in 1 chunks 	[======================================================================] 100 %Partially merging SJ files in 1 chunks 	[======================================================================] 100 %
+Partially merging SJ files in 1 chunks 	[======================================================================] 100 %Merge partial files 	[======================================================================] 100 %Merge partial files 	[======================================================================] 100 %
+0 de novo junctions found in 0 genes.
+	0 novel junctions mapped to multiple genes.
+	ignored 0 observed junctions that did not map to any gene.
+Done merging SJ files in 8ms
+
+
+Adding de novo splice events
+============================
+
+Adding de novo edges 	[>                                                                     ] 0 %Adding de novo edges 	[======================================================================] 100 %Adding de novo edges 	[======================================================================] 100 %
+Added 0 new junctions to 0 genes.
+Done adding De Novo edges in 1ms
+
+
+Getting read-depth
+==================
+
+python /home/bioit/mhecke/Programs/ELLIPSIS/build/getGeneDepth.py -n 1 --deNovo_dir outELLIPSIS/deNovoGraphs --bam_dir /home/bioit/mhecke/Programs/ELLIPSIS/testData/alignment --exonDepth_dir outELLIPSIS/exonDepth --junctionDepth_dir outELLIPSIS/allJunctionCounts --geneCount_dir outELLIPSIS/geneCounts --lowQual_dir outELLIPSIS/lowQual --rawCountFile /home/bioit/mhecke/Programs/ELLIPSIS/testData/counts/scCounts.tsv
+reading in exons and junctions as reference
+reading raw counts
+computing depth from bamfiles
+filtering non-expressed exons
+filtering non-expressed junctions
+ordering cells in geneCounts
+ordering cells in lowQual
+Done getting depth in 1s 799ms
+
+
+Simplifying splice graphs
+=========================
+
+Simplifying graphs 	[>                                                                     ] 0 %Simplifying graphs 	[======================================================================] 100 %Simplifying graphs 	[======================================================================] 100 %
+Removed 3 nodes in 1 genes.
+Removed 22 edges in 1 genes.
+Performed 0 merge operations in 0 genes.
+Average number of nodes : 16
+Average number of edges : 22
+
+Done simplifying graphs in 1ms
+
+
+Computing PSI values
+=================
+
+Computing PSI values 	[>                                                                     ] 0 %Computing PSI values 	[======================================================================] 100 %Computing PSI values 	[======================================================================] 100 %
+Done computing PSI values in 36ms
+
+Exiting... bye!

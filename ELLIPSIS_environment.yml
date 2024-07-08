@@ -1,0 +1,21 @@
+name: ELLIPSIS_env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.8.13
+  - pip=21.2.4
+  - cmake=3.18.2
+  - pycairo=1.21.0
+  - matplotlib=3.7.1
+  - scipy=1.10.1
+  - pip:
+    - fonttools==4.31.2
+    - htseq==2.0.1
+    - kiwisolver==1.4.2
+    - numpy==1.22.3
+    - pillow==9.1.0
+    - pysam==0.19.0
+    - tqdm==4.64.0
+    - igraph==0.9.10
+    - pandas==1.4.2

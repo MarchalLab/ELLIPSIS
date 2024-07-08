@@ -1,0 +1,7 @@
+sample_01.bam	sample_02.bam	sample_03.bam	sample_04.bam	sample_05.bam
+__alignment_not_unique	0	0	0	0	0
+__ambiguous	0	0	0	0	0
+__no_feature	0	0	0	0	0
+__not_aligned	0	0	0	0	0
+__too_low_aQual	0	0	0	0	0
+ENSG00000000003.15	137	274	411	548	686

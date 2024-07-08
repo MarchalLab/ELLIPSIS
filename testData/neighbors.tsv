@@ -1,0 +1,5 @@
+sample_01.bam	sample_02.bam	sample_03.bam	sample_04.bam	sample_05.bam
+sample_02.bam	sample_03.bam	sample_04.bam	sample_05.bam	sample_01.bam
+sample_03.bam	sample_04.bam	sample_05.bam	sample_01.bam	sample_02.bam
+sample_04.bam	sample_05.bam	sample_01.bam	sample_02.bam	sample_03.bam
+sample_05.bam	sample_01.bam	sample_02.bam	sample_03.bam	sample_04.bam

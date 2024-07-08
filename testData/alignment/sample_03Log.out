@@ -1,0 +1,208 @@
+STAR version=2.7.10b
+STAR compilation time,server,dir=2022-11-01T09:53:26-04:00 :/home/dobin/data/STAR/STARcode/STAR.master/source
+STAR git: On branch master ; commit c6f8efc2c7043ef83bf8b0d9bed36bbb6b9b1133 ; diff files: CHANGES.md 
+##### Command Line:
+STAR --runThreadN 10 --genomeDir ./STAR_index --genomeLoad LoadAndKeep --readFilesIn ./rawReads/sample_03_1.fasta ./rawReads/sample_03_2.fasta --outFileNamePrefix ./alignment/sample_03 --outFilterType BySJout --outSAMtype BAM SortedByCoordinate --limitBAMsortRAM 10000000000
+##### Initial USER parameters from Command Line:
+outFileNamePrefix                 ./alignment/sample_03
+###### All USER parameters from Command Line:
+runThreadN                    10     ~RE-DEFINED
+genomeDir                     ./STAR_index     ~RE-DEFINED
+genomeLoad                    LoadAndKeep     ~RE-DEFINED
+readFilesIn                   ./rawReads/sample_03_1.fasta   ./rawReads/sample_03_2.fasta        ~RE-DEFINED
+outFileNamePrefix             ./alignment/sample_03     ~RE-DEFINED
+outFilterType                 BySJout     ~RE-DEFINED
+outSAMtype                    BAM   SortedByCoordinate        ~RE-DEFINED
+limitBAMsortRAM               10000000000     ~RE-DEFINED
+##### Finished reading parameters from all sources
+
+##### Final user re-defined parameters-----------------:
+runThreadN                        10
+genomeDir                         ./STAR_index
+genomeLoad                        LoadAndKeep
+readFilesIn                       ./rawReads/sample_03_1.fasta   ./rawReads/sample_03_2.fasta   
+limitBAMsortRAM                   10000000000
+outFileNamePrefix                 ./alignment/sample_03
+outSAMtype                        BAM   SortedByCoordinate   
+outFilterType                     BySJout
+
+-------------------------------
+##### Final effective command line:
+STAR   --runThreadN 10   --genomeDir ./STAR_index   --genomeLoad LoadAndKeep   --readFilesIn ./rawReads/sample_03_1.fasta   ./rawReads/sample_03_2.fasta      --limitBAMsortRAM 10000000000   --outFileNamePrefix ./alignment/sample_03   --outSAMtype BAM   SortedByCoordinate      --outFilterType BySJout
+----------------------------------------
+
+Number of fastq files for each mate = 1
+ParametersSolo: --soloCellFilterType CellRanger2.2 filtering parameters:  3000 0.99 10
+Finished loading and checking parameters
+Reading genome generation parameters:
+### STAR   --runMode genomeGenerate      --runThreadN 10   --genomeDir ./STAR_index   --genomeFastaFiles chrX.fa      --sjdbGTFfile TSPAN6.gtf
+### GstrandBit=32
+versionGenome                 2.7.4a     ~RE-DEFINED
+genomeType                    Full     ~RE-DEFINED
+genomeFastaFiles              chrX.fa        ~RE-DEFINED
+genomeSAindexNbases           14     ~RE-DEFINED
+genomeChrBinNbits             18     ~RE-DEFINED
+genomeSAsparseD               1     ~RE-DEFINED
+genomeTransformType           None     ~RE-DEFINED
+genomeTransformVCF            -     ~RE-DEFINED
+sjdbOverhang                  100     ~RE-DEFINED
+sjdbFileChrStartEnd           -        ~RE-DEFINED
+sjdbGTFfile                   TSPAN6.gtf     ~RE-DEFINED
+sjdbGTFchrPrefix              -     ~RE-DEFINED
+sjdbGTFfeatureExon            exon     ~RE-DEFINED
+sjdbGTFtagExonParentTranscripttranscript_id     ~RE-DEFINED
+sjdbGTFtagExonParentGene      gene_id     ~RE-DEFINED
+sjdbInsertSave                Basic     ~RE-DEFINED
+genomeFileSizes               156240236   1277887293        ~RE-DEFINED
+Genome version is compatible with current STAR
+Number of real (reference) chromosomes= 1
+1	chrX	156040895	0
+--sjdbOverhang = 100 taken from the generated genome
+Started loading the genome: Tue Jun 11 13:41:38 2024
+
+Genome: size given as a parameter = 156240236
+SA: size given as a parameter = 1277887293
+SAindex: size given as a parameter = 1
+Read from SAindex: pGe.gSAindexNbases=14  nSAi=357913940
+nGenome=156240236;  nSAbyte=1277887293
+GstrandBit=32   SA number of indices=309790858
+Found genome in shared memory
+Using shared memory for genome. key=0xafa5bc0;   shmid=688129
+Finished loading the genome: Tue Jun 11 13:41:38 2024
+
+Processing splice junctions database sjdbN=12,   pGe.sjdbOverhang=100 
+alignIntronMax=alignMatesGapMax=0, the max intron size will be approximately determined by (2^winBinNbits)*winAnchorDistNbins=589824
+Opening the file: ./alignment/sample_03_STARtmp//FilterBySJoutFiles.mate1.thread0 ... ok
+Opening the file: ./alignment/sample_03_STARtmp//FilterBySJoutFiles.mate2.thread0 ... ok
+Opening the file: ./alignment/sample_03_STARtmp//FilterBySJoutFiles.mate1.thread1 ... ok
+Opening the file: ./alignment/sample_03_STARtmp//FilterBySJoutFiles.mate2.thread1 ... ok
+Opening the file: ./alignment/sample_03_STARtmp//FilterBySJoutFiles.mate1.thread2 ... ok
+Opening the file: ./alignment/sample_03_STARtmp//FilterBySJoutFiles.mate2.thread2 ... ok
+Opening the file: ./alignment/sample_03_STARtmp//FilterBySJoutFiles.mate1.thread3 ... ok
+Opening the file: ./alignment/sample_03_STARtmp//FilterBySJoutFiles.mate2.thread3 ... ok
+Opening the file: ./alignment/sample_03_STARtmp//FilterBySJoutFiles.mate1.thread4 ... ok
+Opening the file: ./alignment/sample_03_STARtmp//FilterBySJoutFiles.mate2.thread4 ... ok
+Opening the file: ./alignment/sample_03_STARtmp//FilterBySJoutFiles.mate1.thread5 ... ok
+Opening the file: ./alignment/sample_03_STARtmp//FilterBySJoutFiles.mate2.thread5 ... ok
+Opening the file: ./alignment/sample_03_STARtmp//FilterBySJoutFiles.mate1.thread6 ... ok
+Opening the file: ./alignment/sample_03_STARtmp//FilterBySJoutFiles.mate2.thread6 ... ok
+Opening the file: ./alignment/sample_03_STARtmp//FilterBySJoutFiles.mate1.thread7 ... ok
+Opening the file: ./alignment/sample_03_STARtmp//FilterBySJoutFiles.mate2.thread7 ... ok
+Opening the file: ./alignment/sample_03_STARtmp//FilterBySJoutFiles.mate1.thread8 ... ok
+Opening the file: ./alignment/sample_03_STARtmp//FilterBySJoutFiles.mate2.thread8 ... ok
+Opening the file: ./alignment/sample_03_STARtmp//FilterBySJoutFiles.mate1.thread9 ... ok
+Opening the file: ./alignment/sample_03_STARtmp//FilterBySJoutFiles.mate2.thread9 ... ok
+Created thread # 1
+Created thread # 2
+Created thread # 3
+Created thread # 4
+Created thread # 5
+Created thread # 6
+Created thread # 7
+Created thread # 8
+Created thread # 9
+Completed: thread #2
+Completed: thread #3
+Completed: thread #4
+Completed: thread #5
+Completed: thread #6
+Completed: thread #7
+Completed: thread #8
+Completed: thread #0
+Completed: thread #9
+Completed: thread #1
+Joined thread # 1
+Joined thread # 2
+Joined thread # 3
+Joined thread # 4
+Joined thread # 5
+Joined thread # 6
+Joined thread # 7
+Joined thread # 8
+Joined thread # 9
+Completed stage 1 mapping of outFilterBySJout mapping
+Detected 0 novel junctions that passed filtering, will proceed to filter reads that contained unannotated junctions
+Created thread # 1
+Created thread # 2
+Created thread # 3
+Created thread # 4
+Created thread # 5
+Created thread # 6
+Completed: thread #2
+Completed: thread #4
+Created thread # 7
+Completed: thread #3
+Completed: thread #6
+Completed: thread #5
+Created thread # 8
+Completed: thread #7
+Created thread # 9
+Completed: thread #8
+Completed: thread #0
+Completed: thread #9
+BAM sorting: 822 mapped reads
+BAM sorting bins genomic start loci:
+1	0	100627264
+2	0	100627353
+3	0	100627416
+4	0	100627518
+5	0	100627609
+6	0	100627685
+7	0	100627787
+8	0	100627866
+9	0	100627965
+10	0	100628087
+11	0	100628194
+12	0	100628307
+13	0	100628384
+14	0	100628528
+15	0	100628640
+16	0	100628735
+17	0	100628835
+18	0	100628929
+19	0	100629045
+20	0	100629133
+21	0	100629238
+22	0	100629329
+23	0	100629435
+24	0	100629566
+25	0	100629692
+26	0	100629790
+27	0	100629899
+28	0	100630771
+29	0	100630856
+30	0	100632549
+31	0	100633420
+32	0	100633461
+33	0	100633493
+34	0	100633526
+35	0	100633969
+36	0	100633986
+37	0	100634013
+38	0	100635183
+39	0	100635198
+40	0	100635226
+41	0	100635568
+42	0	100635592
+43	0	100635616
+44	0	100635639
+45	0	100635677
+46	0	100635691
+47	0	100635730
+48	0	100636716
+Completed: thread #1
+Joined thread # 1
+Joined thread # 2
+Joined thread # 3
+Joined thread # 4
+Joined thread # 5
+Joined thread # 6
+Joined thread # 7
+Joined thread # 8
+Joined thread # 9
+Jun 11 13:41:38 ..... finished mapping
+RAM after mapping:
+VmPeak:	 4982388 kB; VmSize:	 4875872 kB; VmHWM:	 1480696 kB; VmRSS:	 1428552 kB; 
+Jun 11 13:41:38 ..... started sorting BAM
+Max memory needed for sorting = 13748
+ALL DONE!
