@@ -1,0 +1,28 @@
+name: scDataProcessing
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - bedops=2.4.41
+  - bzip2=1.0.8
+  - fastqc=0.11.9
+  - htseq=2.0.2
+  - libblas=3.9.0
+  - liblapack=3.9.0
+  - libopenblas=0.3.21
+  - libzlib=1.2.13
+  - matplotlib-base=3.5.3
+  - numpy=1.21.6
+  - pandas=1.3.5
+  - perl=5.32.1
+  - pip=22.3
+  - pyparsing=3.0.9
+  - pysam=0.15.3
+  - python=3.7.12
+  - readline=8.1.2
+  - samtools=1.3.1
+  - sra-tools=2.9.1_1
+  - star=2.7.10a
+  - tk=8.6.12
+  - zlib=1.2.13
