@@ -103,62 +103,48 @@ class GeneInfo:
 class GeneCov:
 
     def __init__(self, geneInfo):
-        self.exonCov = HTSeq.GenomicArray("auto", stranded = False, typecode = "d")
-        self.junctionCounts = CountDict()
+
+        #cov info per UMI
+        self.UMIexons = dict()
+        self.UMIjunctions = dict()
+        self.UMIdepth = dict()
+
+        #junctions in gene
         self.consecutiveJunctions = geneInfo.consecutiveJunctions
         self.observableJunctions = geneInfo.observableJunctions
+
+        #per read quality information
         self.highQualCounts = 0
         self.lowQualCounts = 0
 
-    def addSingle(self, read, depth):
+    def addRead(self, read, depth):
         #skip low quality reads
         if (read.aQual < 10):
             self.lowQualCounts += depth
             return
 
-        #get covered positions & junctions
-        posCovered = HTSeq.GenomicArray("auto", stranded = False, typecode = "b")
-        junctionsCovered = set()
-        self.addSingleRead(read, posCovered, junctionsCovered)
-
-        #add observed coverage
-        for iv, val in posCovered.steps():
-            if (val):
-                self.exonCov[iv] += depth
-
-        #add observed junctions
-        for junction in junctionsCovered:
-            self.junctionCounts.add(junction, depth)
-
         #add raw gene counts
         self.highQualCounts += depth
 
-    def addPaired(self, read1, read2, depth):
+        #get UMI if it exists
+        try :
+            UMI = read.optional_field('UB')
+        except KeyError:
+            UMI = ""
+        if UMI == "":
+            UMI = read.read.name #ensure PE reads (with same readID) have same UMI
 
-        #skip low quality reads
-        if (read1.aQual < 10 or read2.aQual < 10):
-            self.lowQualCounts += depth
-            return
+        #initialize UMI counting
+        if UMI not in self.UMIexons:
+            self.UMIexons[UMI] =  HTSeq.GenomicArray("auto", stranded = False, typecode = "b") #avoid overlapping parts of reads with same UMI to be counted twice
+            self.UMIjunctions[UMI] = set()
+            self.UMIdepth[UMI] = []
 
-        #avoid overlapping mate pair to be counted twice
-        posCovered = HTSeq.GenomicArray("auto", stranded = False, typecode = "b")
-        junctionsCovered = set()
-        self.addSingleRead(read1, posCovered, junctionsCovered)
-        self.addSingleRead(read2, posCovered, junctionsCovered)
+        #get covered positions & junctions in this read
+        self.UMIdepth[UMI].append(depth)
+        self.addReadCov(read, UMI)
 
-        #add observed coverage
-        for iv, val in posCovered.steps():
-            if (val):
-                self.exonCov[iv] += depth
-
-        #add observed junctions
-        for junction in junctionsCovered:
-            self.junctionCounts.add(junction, depth)
-
-        #add raw gene counts
-        self.highQualCounts += depth
-
-    def addSingleRead(self, read, posCovered, junctionsCovered):
+    def addReadCov(self, read, UMI):
 
         prev = None
         for cigop in read.cigar:
@@ -172,21 +158,44 @@ class GeneCov:
             cigopiv.strand = '.'
 
             #add count to coverage vector for matches
-            posCovered[cigopiv] = True
+            self.UMIexons[UMI][cigopiv] = True
 
             #check if read covers artificial junctions
             for p1,p2 in self.consecutiveJunctions:
                 if (cigopiv.contains(HTSeq.GenomicPosition(read.iv.chrom, int(p1)))
                        and cigopiv.contains(HTSeq.GenomicPosition(read.iv.chrom, int(p2)))):
-                    junctionsCovered.add((p1,p2))
+                    self.UMIjunctions[UMI].add((p1,p2))
 
             #check if read covers non-artificial junction
             if prev is not None:
                 p1, p2 = prev.end-1, cigopiv.start
                 if (p1,p2) in self.observableJunctions:
-                    junctionsCovered.add((p1,p2))
+                    self.UMIjunctions[UMI].add((p1,p2))
 
             prev = cigop.ref_iv
+
+    def getCov(self):
+
+        #cov per gene
+        exonCov = HTSeq.GenomicArray("auto", stranded = False, typecode = "d")
+        junctionCounts = CountDict()
+
+        for UMI in self.UMIexons:
+
+            depth = self.UMIdepth[UMI]
+            depth = sum(depth)/len(depth)
+
+            #add observed coverage
+            for iv, val in self.UMIexons[UMI].steps():
+                if (val):
+                    exonCov[iv] += depth
+
+            #add observed junctions
+            for junction in self.UMIjunctions[UMI]:
+                junctionCounts.add(junction, depth)
+
+        return exonCov, junctionCounts
+
 
     def getLowQualFrac(self):
         return self.lowQualCounts / (self.lowQualCounts + self.highQualCounts)
@@ -434,7 +443,8 @@ def readPairedBam(sample, exons, allGeneInfo, bamDir, exonDepthQueue, junctionDe
                 depth = mappingGenes[gene]
 
                 #add read to coverage vectors
-                allGeneCov[gene].addPaired(read1, read2, depth)
+                allGeneCov[gene].addRead(read1, depth)
+                allGeneCov[gene].addRead(read2, depth)
 
         except KeyError:
             #chrom of read not in reference
@@ -485,7 +495,7 @@ def readSingleBam(sample, exons, allGeneInfo, bamDir, exonDepthQueue, junctionDe
                 depth = mappingGenes[gene]
 
                 #add read to coverage vectors
-                allGeneCov[gene].addSingle(read, depth)
+                allGeneCov[gene].addRead(read, depth)
 
         except KeyError:
             #chrom of read not in reference
@@ -498,6 +508,7 @@ def readSingleBam(sample, exons, allGeneInfo, bamDir, exonDepthQueue, junctionDe
 def writeGeneDepthToFile(sample, geneInfo, geneCov, exonDepthQueue, junctionDepthQueue, geneCountQueue, lowQualQueue):
 
     geneID = geneInfo.geneID
+    exonCov, junctionCounts = geneCov.getCov()
 
     #write exon counts to file
     line = sample
@@ -507,7 +518,7 @@ def writeGeneDepthToFile(sample, geneInfo, geneCov, exonDepthQueue, junctionDept
         estart, estop = exon.split("-")
         iv = HTSeq.GenomicInterval(geneInfo.chr, int(estart)-1, int(estop)) #HTSeq is 0-based and uses half-open interval
 
-        sumExonDepth = sum(list(geneCov.exonCov[iv]))
+        sumExonDepth = sum(list(exonCov[iv]))
         line += "\t" + str(sumExonDepth)
         header += "\t" + exon
 
@@ -522,7 +533,7 @@ def writeGeneDepthToFile(sample, geneInfo, geneCov, exonDepthQueue, junctionDept
         start = junction[0] + 2     #change from 0-based to 1-based + save intron positions instead of exon pos
         stop = junction[1]          #change from 0-based to 1-based + save intron positions instead of exon pos
 
-        depth = geneCov.junctionCounts.get(junction)
+        depth = junctionCounts.get(junction)
         line += "\t" + str(depth)
         header += "\t" + str(start) + "_" + str(stop)
 

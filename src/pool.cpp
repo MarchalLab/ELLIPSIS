@@ -151,13 +151,14 @@ SimplifyArgs::SimplifyArgs(Progressbar &progressbar, string graphFile, string ex
                            string outFile, Counter& numNodesRemoved, Counter& numGraphsNodesRemoved,
                            Counter& numEdgesRemoved, Counter& numGraphsEdgesRemoved, Counter& numMerged,
                            Counter& numGraphsMerged, Counter& numNodesRemaining,
-                           Counter& numEdgesRemaining) : Args(progressbar),
+                           Counter& numEdgesRemaining, LogWriter &filtLog, bool reportUnspliced) : Args(progressbar),
         graphFile(move(graphFile)), exonDepthFile(move(exonDepthFile)), junctionCountFile(move(junctionCountFile)),
         geneCountFile(move(geneCountFile)), minDepth(minDepth), minJunctionCount(minJunctionCount),
         minJunctionCells(minJunctionCells), outFile(move(outFile)), numNodesRemoved(numNodesRemoved),
         numGraphsNodesRemoved(numGraphsNodesRemoved), numEdgesRemoved(numEdgesRemoved),
         numGraphsEdgesRemoved(numGraphsEdgesRemoved), numMerged(numMerged), numGraphsMerged(numGraphsMerged),
-        numNodesRemaining(numNodesRemaining), numEdgesRemaining(numEdgesRemaining) {}
+        numNodesRemaining(numNodesRemaining), numEdgesRemaining(numEdgesRemaining), filtLog(filtLog),
+        reportUnspliced(reportUnspliced){}
 
 void SimplifyArgs::doWork() {
 
@@ -182,6 +183,8 @@ void SimplifyArgs::doWork() {
     countIFS.close();
 
     if (! geneExpressed){
+        if (VERBOSE)
+            filtLog.writeLine(graph.getGeneID() + "\t" + "readcount");
         graph.deleteGraph();
         progressbar.update(1);
         return;
@@ -232,7 +235,7 @@ void SimplifyArgs::doWork() {
     if (nMerged > 0)
         numGraphsMerged.increment();
 
-    if (graph.getNumEdges() != 0 && graph.isSpliced()){ //only consider non-empty graphs, and genes that where splicing is possible
+    if (graph.getNumEdges() != 0 && (graph.isSpliced() | reportUnspliced)){ //only consider non-empty graphs, and genes that where splicing is possible
 
         //write resulting graph to file
         ofstream OFS(outFile);
@@ -245,6 +248,11 @@ void SimplifyArgs::doWork() {
 
         numNodesRemaining.increment(numNodes);
         numEdgesRemaining.increment(numEdges);
+    } else{
+        if (VERBOSE and graph.getNumEdges() == 0)
+            filtLog.writeLine(graph.getGeneID() + "\t" + "no edges");
+        if (VERBOSE and ! graph.isSpliced())
+            filtLog.writeLine(graph.getGeneID() + "\t" + "not spliced");
     }
 
     //reset graph

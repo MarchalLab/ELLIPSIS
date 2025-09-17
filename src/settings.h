@@ -37,6 +37,7 @@ private:
     double maxLowQual;
 
     bool pairedEnd;
+    bool reportUnspliced;
 
     vector<std::string> selectedGenes;
 
@@ -101,6 +102,8 @@ public:
 
     std::string getIterLog() const;
 
+    std::string getFiltLog() const;
+
     std::string getComplexLog() const;
 
     const size_t& getMinJunctionCount() const;
@@ -142,6 +145,8 @@ public:
     const string& getNovelJunctionFile() const;
 
     bool isPairedEnd() const;
+
+    bool getReportUnspliced() const;
 };
 
 

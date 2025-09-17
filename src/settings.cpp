@@ -24,7 +24,8 @@ void Settings::printUsage()
         "  -readLength  \t\tthe average length of a read (for PE reads: length of 1 mate)\n\n"
 
         " [addtional options without argument]\n"
-        "  -singleEnd  \t\tsingle end reads [default PE reads]"
+        "  -singleEnd  \t\tsingle end reads [default PE reads] \n"
+        "  -reportUnspliced  \t\tinclude unspliced genes in the results (all PSI = 100%) \n"
         "  -verbose    \t\tcreate additional log files during PSI calculations (logPSI and logAlpha) \n\n"
 
         " [additional options with 1 argument]\n"
@@ -56,7 +57,8 @@ void Settings::printUsage()
 
 Settings::Settings(int argc, char ** argv) : minJunctionCount(5), outDir(), runName(),
     numCPU(4), wObs(1), wSrcSink(1), wFlow(6), wClust(4), maxIter(100), minDepth(10), minJunctionCells(10),
-    trueGTF(), trueClusterFlow(), maxLowQual(0.1), novelJunctionFile(), maxPaths(1e9), chunkSize(1000), pairedEnd(true)
+    trueGTF(), trueClusterFlow(), maxLowQual(0.1), novelJunctionFile(), maxPaths(1e9), chunkSize(1000), pairedEnd(true),
+    reportUnspliced(false)
 {
     const size_t reqArguments = 4;
 
@@ -76,6 +78,10 @@ Settings::Settings(int argc, char ** argv) : minJunctionCount(5), outDir(), runN
         }
         if (arg == "-singleEnd"){
             pairedEnd = false;
+            continue; //no arg
+        }
+        if (arg == "-reportUnspliced"){
+            reportUnspliced = true;
             continue; //no arg
         }
 
@@ -331,6 +337,10 @@ std::string Settings::getIterLog() const{
     return outDir + "/" + runName + "/nIterPSI.log";
 }
 
+std::string Settings::getFiltLog() const{
+    return outDir + "/filteredGenes.log";
+}
+
 std::string Settings::getComplexLog() const{
     if (runName.empty())
         return outDir + "/genesTooComplex.log";
@@ -415,4 +425,8 @@ const string& Settings::getNovelJunctionFile() const{
 
 bool Settings::isPairedEnd() const{
     return pairedEnd;
+}
+
+bool Settings::getReportUnspliced() const{
+    return reportUnspliced;
 }

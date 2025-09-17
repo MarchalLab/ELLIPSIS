@@ -366,6 +366,11 @@ void simplifyGraphs(Settings& settings){
     Counter numNodesRemaining;      //number of remaining nodes
     Counter numEdgesRemaining;      //number of remaining edges
 
+    //log
+    LogWriter filtLog; //log genes for which no simplified graph is produced
+    if(VERBOSE)
+        filtLog.init(settings.getFiltLog());
+
     vector<SimplifyArgs*> argvector;
 
     //progressbar
@@ -391,7 +396,8 @@ void simplifyGraphs(Settings& settings){
                                               settings.getSimplifiedDir() + "/" + gene,
                                               numNodesRemoved, numGraphsNodesRemoved, numEdgesRemoved,
                                               numGraphsEdgesRemoved, numMerged, numGraphsMerged,
-                                              numNodesRemaining, numEdgesRemaining);
+                                              numNodesRemaining, numEdgesRemaining, filtLog,
+                                              settings.getReportUnspliced());
         pool.addJob(args);
         argvector.push_back(args);
     }
@@ -401,6 +407,10 @@ void simplifyGraphs(Settings& settings){
 
     //wait for threads to finish work
     for(auto&& t : threadPool) t.join();
+
+    //close log writer
+    if (VERBOSE)
+        filtLog.close();
 
     //delete arg objects
     for(auto it : argvector)

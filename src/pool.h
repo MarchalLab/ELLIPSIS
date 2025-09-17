@@ -245,6 +245,10 @@ struct SimplifyArgs : public Args{
     Counter& numNodesRemaining;
     Counter& numEdgesRemaining;
 
+    LogWriter &filtLog;
+
+    bool reportUnspliced;
+
     /**
      * Constructor
      * @param progressbar reference to progressbar
@@ -264,12 +268,15 @@ struct SimplifyArgs : public Args{
      * @param numGraphsMerged keep track of number of graphs where at least 1 merge operation is performed
      * @param numNodesRemaining keep track of number of nodes in the simplified graph
      * @param numEdgesRemaining keep track of number of edges in the simplified graph
+     * @param filtLog log genes for which no simplified graph is produced
+     * @param reportUnspliced report unspliced genes
      */
     SimplifyArgs(Progressbar& progressbar, string graphFile, string exonDepthFile, string junctionCountFile,
                  string geneCountFile, double minDepth, size_t minJunctionCount, size_t minJunctionCells,
                  string outFile, Counter& numNodesRemoved, Counter& numGraphsNodesRemoved,
                  Counter& numEdgesRemoved, Counter& numGraphsEdgesRemoved,  Counter& numMerged,
-                 Counter& numGraphsMerged, Counter& numNodesRemaining, Counter& numEdgesRemaining);
+                 Counter& numGraphsMerged, Counter& numNodesRemaining, Counter& numEdgesRemaining,
+                 LogWriter &filtLog, bool reportUnspliced);
 
 
     /**
